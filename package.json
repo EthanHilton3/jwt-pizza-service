@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cd src && node index.js",
     "run": "cd src && node index.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint ."
   },
   "license": "MIT",
   "dependencies": {
@@ -16,6 +17,9 @@
     "mysql2": "^3.9.7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
     "jest": "^30.2.0",
     "supertest": "^7.1.4"
   }

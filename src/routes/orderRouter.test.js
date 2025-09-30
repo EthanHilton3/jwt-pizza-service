@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../service');
-const { DB, Role } = require('../database/database');
 
 function randomName() {
 	return Math.random().toString(36).substring(2,10);
