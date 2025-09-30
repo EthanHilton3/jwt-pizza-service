@@ -25,7 +25,6 @@ let testUserAuthToken;
 let adminUser;
 let adminUserAuthToken;
 let adminID;
-let adminName;
 let adminEmail;
 
 beforeAll(async () => {
@@ -38,7 +37,6 @@ beforeAll(async () => {
 	const adminRes = await request(app).put('/api/auth').send({ email: adminUser.email,password: adminUser.password });
 	adminUserAuthToken = adminRes.body.token;
 	adminID = adminUser.id;
-	adminName = adminUser.name;
 	adminEmail = adminUser.email;
 	expectValidJwt(adminUserAuthToken);
 });
