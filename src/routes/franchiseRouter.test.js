@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../service');
-const franchiseRouter = require('./franchiseRouter');
 const { DB,Role } = require('../database/database');
 
 function randomName() {
