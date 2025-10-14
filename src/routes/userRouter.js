@@ -39,6 +39,14 @@ userRouter.docs = [
       ],
     },
   },
+  {
+    method: 'DELETE',
+    path: '/api/user/:userId',
+    requiresAuth: true,
+    description: 'Delete a user (admin only)',
+    example: `curl -X DELETE localhost:3000/api/user/3 -H 'Authorization: Bearer tttttt'`,
+    response: { message: 'User deleted successfully' },
+  },
 ];
 
 // getUser
@@ -93,6 +101,33 @@ userRouter.get(
       });
     } catch (error) {
       console.error('Error fetching users:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  })
+);
+
+// deleteUser
+userRouter.delete(
+  '/:userId',
+  authRouter.authenticateToken,
+  asyncHandler(async (req, res) => {
+    // Only admins can delete users
+    if (!req.user.isRole(Role.Admin)) {
+      return res.status(403).json({ message: 'unauthorized' });
+    }
+
+    const userId = Number(req.params.userId);
+    
+    // Prevent admin from deleting themselves
+    if (req.user.id === userId) {
+      return res.status(400).json({ message: 'Cannot delete your own account' });
+    }
+
+    try {
+      await DB.deleteUser(userId);
+      res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting user:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   })

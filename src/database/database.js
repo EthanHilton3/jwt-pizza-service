@@ -134,6 +134,34 @@ class DB {
     }
   }
 
+  async deleteUser(userId) {
+    const connection = await this.getConnection();
+    try {
+      await connection.beginTransaction();
+      try {
+        // Delete user roles first (foreign key constraint)
+        await this.query(connection, `DELETE FROM userRole WHERE userId = ?`, [userId]);
+        
+        // Delete auth tokens
+        await this.query(connection, `DELETE FROM auth WHERE userId = ?`, [userId]);
+        
+        // Delete the user
+        const result = await this.query(connection, `DELETE FROM user WHERE id = ?`, [userId]);
+        
+        if (result.affectedRows === 0) {
+          throw new StatusCodeError('User not found', 404);
+        }
+        
+        await connection.commit();
+      } catch (error) {
+        await connection.rollback();
+        throw error;
+      }
+    } finally {
+      connection.end();
+    }
+  }
+
   async loginUser(userId, token) {
     token = this.getTokenSignature(token);
     const connection = await this.getConnection();
