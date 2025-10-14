@@ -99,6 +99,41 @@ class DB {
     }
   }
 
+  async getUsers(page = 0, limit = 10, nameFilter = '*') {
+    const connection = await this.getConnection();
+    try {
+      const offset = page * limit;
+      
+      // Convert the nameFilter to SQL LIKE pattern (matching my getFranchises method)
+      nameFilter = nameFilter.replace(/\*/g, '%');
+      
+      // Get users with pagination (get one extra to check if there are more)
+      const users = await this.query(connection, 
+        `SELECT id, name, email FROM user WHERE name LIKE ? LIMIT ${limit + 1} OFFSET ${offset}`, 
+        [nameFilter]
+      );
+      
+      // Check if there are more users (matching my getFranchises pattern)
+      const more = users.length > limit;
+      if (more) {
+        users.pop(); // Remove the extra user
+      }
+      
+      // Get roles for each user (similar to how getFranchise gets admins)
+      for (const user of users) {
+        const roles = await this.query(connection, 
+          `SELECT role, objectId FROM userRole WHERE userId = ?`, 
+          [user.id]
+        );
+        user.roles = roles;
+      }
+      
+      return { users: users, more: more };
+    } finally {
+      connection.end();
+    }
+  }
+
   async loginUser(userId, token) {
     token = this.getTokenSignature(token);
     const connection = await this.getConnection();

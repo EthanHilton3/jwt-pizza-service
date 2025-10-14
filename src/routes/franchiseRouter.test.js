@@ -7,7 +7,7 @@ function randomName() {
 }
 
 async function createAdminUser() {
-	let user = { password: 'toomanysecrets',roles: [{ role: Role.Admin }] };
+	let user = { password: 'toomanysecrets', roles: [{ role: Role.Admin }] };
 	user.name = randomName();
 	user.email = user.name + '@admin.com';
 
@@ -19,7 +19,7 @@ function expectValidJwt(potentialJwt) {
 	expect(potentialJwt).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
 }
 
-const testUser = { name: 'pizza diner',email: 'reg@test.com',password: 'a' };
+const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
 let testUserAuthToken;
 let adminUser;
 let adminUserAuthToken;
