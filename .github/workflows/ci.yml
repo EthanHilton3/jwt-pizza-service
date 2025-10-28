@@ -104,6 +104,11 @@ jobs:
         with:
           name: package
 
+      - name: Debug GitHub OIDC context
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Ref: ${{ github.ref }}"
+
       - name: Create OIDC token to AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
