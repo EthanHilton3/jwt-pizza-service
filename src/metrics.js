@@ -293,7 +293,7 @@ class Metrics {
 	getMetricUnit(metricName) {
 		if (metricName.includes('percent')) return '%';
 		if (metricName.includes('latency')) return 'ms';
-		if (metricName.includes('revenue')) return 'USD';
+		if (metricName.includes('revenue')) return 'BTC';
 		if (metricName.includes('requests') || metricName.includes('attempts') || metricName.includes('users') || metricName.includes('pizzas')) return '1';
 		return '1'; // dimensionless
 	}
